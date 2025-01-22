@@ -1,34 +1,22 @@
+from app import views
 from django.urls import path
 
-from .views import (ProductDetailAPIView, CategoryAPIView,
-                    ProductListAPIView, AccessoryAPIView,
-                    ProductSetAPIView, ProductAttributeAPIView,
-                    ClientAPIView, RepairServiceAPIView,
-                    ServiceCategoryAPIView, ServiceProductAPIView,
-                    DeviceRepairAPIView, PromoCodeAPIView,
-                    OrderCreateAPIView)
-
 urlpatterns = [
-    path('categories/', CategoryAPIView.as_view()),
-    path('products-list/', ProductListAPIView.as_view()),
-    path('product/<int:pk>/', ProductDetailAPIView.as_view()),
-    path('product-attribute/', ProductAttributeAPIView.as_view()),
-    path('productset/', ProductSetAPIView.as_view()),
-    path('accessuary/', AccessoryAPIView.as_view()),
-    
-    path('service_category/', ServiceCategoryAPIView.as_view()),
-    path('service-product/', ServiceProductAPIView.as_view()),
-    path('repair-service/', RepairServiceAPIView.as_view()),
-    path('device-repair/', DeviceRepairAPIView.as_view()),
-    path('client/', ClientAPIView.as_view()),
-    
+    path('category/', views.CategoryAPIView.as_view(), name='categories'),
+    path('product/', views.ProductListAPIView.as_view(), name='product-list'),
+    path('product/<int:pk>/detail/', views.ProductDetailAPIView.as_view(), name='product-detail'),
+    path('product_attribute/', views.ProductAttributeAPIView.as_view(), name='product-attribute'),
 
-    # path('order/', OrderAPIView.as_view()),
-    path('order-create/', OrderCreateAPIView.as_view()),
-    path('promo-code/', PromoCodeAPIView.as_view()),
+    path('accessory/', views.AccessoryAPIView.as_view(), name='accessories'),
 
+    path('productset/', views.ProductSetAPIView.as_view(), name='product-set'),
+
+    path('service_category/', views.ServiceCategoryAPIView.as_view(), name='service_category'),
+    path('service_product/', views.ServiceProductAPIView.as_view(), name='service_product'),
+    path('service_repair/', views.RepairServiceAPIView.as_view(), name='repair'),
+    path('device_repair/', views.DeviceRepairAPIView.as_view(), name='device_repair'),
+    path('client/', views.ClientAPIView.as_view(), name='clients'),
+
+    path('order/', views.OrderCreateAPIView.as_view(), name='order'),
+    path('promo_code/', views.PromoCodeAPIView.as_view(), name='promo-code'),
 ]
-
-    
-
-    

@@ -3,29 +3,28 @@ from rest_framework.views import APIView, Response
 from rest_framework import status
 from django.utils import timezone
 
-from .serializers import *
-
-from .models import *
+from app import models
+from app import serializers
 
 
 class CategoryAPIView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategorySerializer
 
 
 class ProductListAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductListSerializer
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductListSerializer
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductDetailSerializer
 
 
 class ProductAttributeAPIView(generics.ListAPIView):
-    queryset = ProductAttribute.objects.all()
-    serializer_class = ProductAttributeSerializer
+    queryset = models.ProductAttribute.objects.all()
+    serializer_class = serializers.ProductAttributeSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -37,18 +36,18 @@ class ProductAttributeAPIView(generics.ListAPIView):
 
 
 class AccessoryAPIView(generics.ListAPIView):
-    queryset = Accessory.objects.all()
-    serializer_class = AccessorySerializer
+    queryset = models.Accessory.objects.all()
+    serializer_class = serializers.AccessorySerializer
 
 
 class ProductSetAPIView(generics.ListAPIView):
-    queryset = ProductSet.objects.all()
-    serializer_class = ProductSetSerializer
+    queryset = models.ProductSet.objects.all()
+    serializer_class = serializers.ProductSetSerializer
 
 
 class ClientAPIView(generics.ListAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
+    queryset = models.Client.objects.all()
+    serializer_class = serializers.ClientSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -59,8 +58,8 @@ class ClientAPIView(generics.ListAPIView):
 
 
 class RepairServiceAPIView(generics.ListAPIView):
-    queryset = RepairService.objects.all()
-    serializer_class = RepairServiceSerializer
+    queryset = models.RepairService.objects.all()
+    serializer_class = serializers.RepairServiceSerializer
 
     def get_queryset(self):
         product_id = self.request.query_params.get('product_id')
@@ -70,13 +69,13 @@ class RepairServiceAPIView(generics.ListAPIView):
 
 
 class ServiceCategoryAPIView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = ServiceCategorySerializer
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.ServiceCategorySerializer
 
 
 class ServiceProductAPIView(generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ServiceProductSerializer
+    queryset = models.Product.objects.all()
+    serializer_class = serializers.ServiceProductSerializer
 
     def get_queryset(self):
         category_id = self.request.query_params.get('category_id')
@@ -86,23 +85,23 @@ class ServiceProductAPIView(generics.ListAPIView):
 
 
 class DeviceRepairAPIView(generics.CreateAPIView):
-    queryset = DeviceRepair.objects.all()
-    serializer_class = DeviceRepairSerializer
+    queryset = models.DeviceRepair.objects.all()
+    serializer_class = serializers.DeviceRepairSerializer
 
 
 class OrderCreateAPIView(generics.CreateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderCreateSerializer
+    queryset = models.Order.objects.all()
+    serializer_class = serializers.OrderCreateSerializer
 
 
 class PromoCodeAPIView(APIView):
     def post(self, request):
-        serializer = PromoCodeCheckSerializer(data=request.data)
+        serializer = serializers.PromoCodeCheckSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         amount = serializer.validated_data.get('amount')
         promo_code = serializer.validated_data.get('promo_code')
 
-        base_promo_code = PromoCode.objects.filter(name=promo_code).first()
+        base_promo_code = models.PromoCode.objects.filter(name=promo_code).first()
         if not base_promo_code:
             return Response(
                 data={"message": "Promo-kod mavjud emas."},

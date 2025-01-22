@@ -1,16 +1,21 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='categories/')
 
+    class Meta:
+        verbose_name_plural = 'Categories'
+        verbose_name = 'Category'
+
     def __str__(self):
         return self.name
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Nomi")
+    name = models.CharField(max_length=100)
     poster = models.ImageField(upload_to='poster/', null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
     description = models.TextField()
@@ -18,6 +23,10 @@ class Product(models.Model):
     cash = models.BooleanField(default=True)
     service_duration = models.CharField(max_length=255)
     made_in = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = 'Products'
+        verbose_name = 'Product'
 
     def __str__(self):
         return self.name
@@ -28,9 +37,20 @@ class ProductImage(models.Model):
     color = models.CharField(max_length=100)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_images')
 
+    class Meta:
+        verbose_name_plural = 'Product Images'
+        verbose_name = 'Product Image'
+
+    def __str__(self):
+        return self.color
+
 
 class Memory(models.Model):
-    volume = models.IntegerField(verbose_name="Xotira")
+    volume = models.IntegerField()
+
+    class Meta:
+        verbose_name_plural = 'Memories'
+        verbose_name = 'Memory'
 
     def __str__(self):
         return str(self.volume)
@@ -39,7 +59,7 @@ class Memory(models.Model):
 class ProductMemoryPrice(models.Model):
     additional_price = models.IntegerField(default=0)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_memories')
-    memory = models.ForeignKey(Memory, on_delete=models.CASCADE, related_name='product_memories')
+    memory = models.ForeignKey(Memory, on_delete=models.CASCADE, related_name='memories')
 
     def __str__(self):
         return f"{self.product.name}"
@@ -47,6 +67,10 @@ class ProductMemoryPrice(models.Model):
 
 class AttributeType(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Attribute Types'
+        verbose_name = 'Attribute Type'
 
     def __str__(self):
         return self.name
@@ -67,7 +91,7 @@ class ProductAttribute(models.Model):
 
 
 class PromoCode(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name="Nomi")
+    name = models.CharField(max_length=100, unique=True)
     min_amount = models.DecimalField(max_digits=10, decimal_places=1)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     expiry_date = models.DateField(null=True, blank=True)
@@ -109,7 +133,7 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_products')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orders')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_products')
     count = models.IntegerField()
     color = models.ForeignKey(
@@ -135,8 +159,10 @@ class Accessory(models.Model):
     price = models.IntegerField()
     image = models.ImageField(upload_to='accessories/')
     description = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True,
-                                 related_name='accessories')
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE,
+        blank=True, null=True, related_name='accessories'
+    )
 
     def __str__(self):
         return self.name
@@ -161,7 +187,7 @@ class OrderProductSet(models.Model):
     product_set = models.ForeignKey(ProductSet, on_delete=models.CASCADE)
     price = models.FloatField()
     count = models.IntegerField()
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_productsets')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_product_sets')
 
     def __str__(self):
         return f"{self.product_set.product.name} x {self.count}"
@@ -185,7 +211,7 @@ class Client(models.Model):
 class RepairService(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    fix_time = models.DateField()
+    fix_time = models.CharField(max_length=10)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='repair_products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='repair_categories')
 
@@ -200,5 +226,3 @@ class DeviceRepair(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.repair_service}"
-
-
