@@ -136,6 +136,6 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
-
 media/
+static
 db.sqlite3/

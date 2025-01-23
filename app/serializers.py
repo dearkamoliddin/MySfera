@@ -166,15 +166,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
         return instance
 
-    # def create(self, validated_data):
-    #     order_products = validated_data.pop("order_products")
-    #     order_sets = validated_data.pop("order_sets")
-    #     instance = models.Order.objects.create(**validated_data)
-    #     items = [models.OrderProduct(order=instance, **order_product) for order_product in order_products]
-    #     if items:
-    #         models.OrderProduct.objects.bulk_create(items)
-    #     return instance
-
 
 # Service Landing Page
 class ClientSerializer(serializers.ModelSerializer):
