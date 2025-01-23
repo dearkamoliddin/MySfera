@@ -3,11 +3,11 @@ services:
     build:
       context: .
     container_name: "web-task"
-    command: gunicorn --bind 0.0.0.0:8008 myproject.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8008 core.wsgi:application
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8000:8000" # 8008:8008
     depends_on:
       - db
     restart: always
